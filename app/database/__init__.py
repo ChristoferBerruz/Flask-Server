@@ -1,5 +1,5 @@
-from .models import db
-from .models import Admin, HandwashingRecord, RecordingDevice
+from app.database.models import db
+from app.database.models import Admin, HandwashingRecord, RecordingDevice
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
