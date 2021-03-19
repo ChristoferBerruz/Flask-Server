@@ -3,3 +3,4 @@ requests==2.24.0
 python-dotenv==0.15.0
 pony==0.7.14
 psycopg2==2.8.6
+flask-restful==0.3.8
