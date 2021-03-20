@@ -1,7 +1,7 @@
 from flask_restful import Resource, abort, reqparse
 from flask import request
 from app.database.models import HandwashingRecord, RecordingDevice, Admin
-from pony.orm import db_session, ObjectNotFound
+from pony.orm import db_session, ObjectNotFound, select
 from datetime import datetime
 import json
 
@@ -42,3 +42,20 @@ class HandwashingRecordItem(Resource):
                 device = device
             )
             return {}, 201
+
+
+class HandwashingRecords(Resource):
+
+    def get(self, device_id):
+
+        with db_session:
+            records = HandwashingRecord.select(lambda r: r.device.id == device_id)
+
+            data = [{
+                'id':record.id,
+                'timestamp':str(record.timestamp),
+                'duration':record.duration,
+                'device':str(record.device.id)
+            } for record in records]
+
+            return data, 200
