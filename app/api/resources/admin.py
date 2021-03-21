@@ -42,7 +42,7 @@ class AdminInfo(Resource):
 
     def post(self):
         try:
-            admin_info = admin_form_validator.loads(request.data)
+            admin_info = admin_form_validator.load(request.json)
 
             firstname = admin_info['firstname']
             lastname = admin_info['lastname']
