@@ -5,4 +5,4 @@ COPY . .
 ENV FLASK_APP="app"
 RUN pip install -r app/requirements.txt
 EXPOSE 5000
-ENTRYPOINT [ "flask", "run"]
+ENTRYPOINT [ "flask", "run", "-h", "0.0.0.0", "-p", "5000"]
