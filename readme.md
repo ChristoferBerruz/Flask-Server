@@ -15,9 +15,11 @@
 2. Clone this repository
 3. **Contact me so I can give you an ```.env``` file**. Place this file under the ```app/config``` folder.
 4. Install dependencies using ```pip install -r app/requirements.txt```
+    * The Pony ORM dependency uses psycopg2 which requires some native binaries. It ***might*** require
+      installing those binaries
 5. Run the flask server
-5a. (Linux) execute ```run-flask.sh``` script
-5b. (Windows) execute ```run-flask.ps1``` script
+    * (Linux) execute ```run-flask.sh``` script
+    * (Windows) execute ```run-flask.ps1``` script
 
 ## Docker support - only Linux
 
