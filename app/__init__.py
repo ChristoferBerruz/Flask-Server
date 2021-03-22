@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from app.database import init_database
 from flask_restful import Api
 from app.api.resources.handwashing import HandwashingRecordItem, HandwashingRecords
 from app.api.resources.admin import AdminInfo
 from app.api.resources.auth import Login
 from flask_jwt_extended import JWTManager
 
+from app.database.models import db
 from app.config import config
 
 # Create flask app
@@ -20,7 +20,8 @@ jwt = JWTManager(app)
 api = Api(app, prefix=config.API_PREFIX)
 
 # Connnect to database
-init_database()
+db.bind(**config.DB_OPTIONS)
+db.generate_mapping(create_tables=True)
 
 # Add enpoints
 api.add_resource(HandwashingRecordItem, '/handwashing-record/<int:record_id>', '/handwashing-record')
