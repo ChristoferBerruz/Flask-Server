@@ -1,0 +1,1 @@
+sudo docker run --name flask-docker-demo-app -p 5000:5000 cleanhands-flask-server
