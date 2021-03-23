@@ -27,6 +27,12 @@ If you just want to try the server, without modifying anything, build a docker c
 
 If you are using Windows, use WSL 2 to build and run the container.
 
+### Download from DockerHub
+
+Pull the docker image from DockerHub using the following
+
+```docker pull cberruz/cleanhands-flask-server```
+
 ### Building from source
 
 **You need an ```.env``` file for the container to work.** Contact me and I will give you the credentials.
