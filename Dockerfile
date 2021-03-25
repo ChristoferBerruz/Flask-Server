@@ -1,5 +1,11 @@
-# Pull alpine version of python
+# Pull alpine version of python + nginx and uswgi
 FROM tiangolo/uwsgi-nginx-flask:python3.8-alpine
+
+# Define the minimum number of workers
+ENV UWSGI_CHEAPER 4
+
+# Define the maximum number of workers
+ENV UWSGI_PROCESSES 8
 
 # Dowload binaries for psycopg2 to work
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
