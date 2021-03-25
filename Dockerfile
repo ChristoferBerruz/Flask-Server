@@ -1,23 +1,21 @@
-# Pull python running in an alpine linux distro
-FROM python:alpine3.7
+# Pull alpine version of python
+FROM tiangolo/uwsgi-nginx-flask:python3.8-alpine
 
-# Install OS packages for psycopg2 to work
+# Dowload binaries for psycopg2 to work
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
 
-# Install native psycopg2 binaries
+# Upgrade pip
+RUN pip install -U pip
+
+# Install psycopg2 binaries
 RUN pip install psycopg2-binary
 
-# Copy working directory
-COPY . .
+# Copy requirements
+COPY app/requirements.txt /tmp/
 
-# Set environment for flask to run
-ENV FLASK_APP="app"
 
-# Install python requirements using pip
-RUN pip install -r app/requirements.txt
+# Install requirements
+RUN pip install -r /tmp/requirements.txt
 
-# Expose ports to other containers
-EXPOSE 5000
-
-# Define command to execute once container is up
-ENTRYPOINT [ "flask", "run", "-h", "0.0.0.0", "-p", "5000"]
+# Copy application inside an /app directory
+COPY . /app
