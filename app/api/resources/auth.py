@@ -6,6 +6,8 @@ from app.database.models import Admin
 from marshmallow import ValidationError
 from pony.orm import db_session
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
 login_data_validator = AdminSchema(only=("email", "password"))
 
 class Login(Resource):
@@ -17,12 +19,14 @@ class Login(Resource):
 
             email = data_json['email']
             password = data_json['password']
-
             with db_session:
-                admin = Admin.get(email=email, password=password)
+                admin = Admin.get(email=email)
 
                 if admin is None:
-                    return {"message": "Invalid credentials."}, 401
+                    abort(400, message="Email is not registered.")
+
+                if not check_password_hash(admin.password, password):
+                    abort(400, message="Invalid password.")
 
                 access_token = create_access_token(identity = admin.id)
                 return {"access_token":access_token}
@@ -55,7 +59,11 @@ class SignUp(Resource):
                 # Admin already exists
                 if admin is not None:
                     abort(400, message = "You are already signed up. Login instead")
+                
+                # Hashing password
+                data_json['password'] = generate_password_hash(data_json['password'])
 
+                # Create record
                 Admin(**data_json)
 
                 return {"message": "Sucesfully created admin"}, 201
