@@ -8,21 +8,21 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-JWT_SKEY = os.environ.get("SECRET_KEY")
-USER = os.environ.get("USER")
-PORT = os.environ.get("PORT")
-HOST = os.environ.get("HOST")
-PASSWORD = os.environ.get("PASSWORD")
+JWT_SKEY = os.environ.get("JWT_SECRET_KEY")
+DB_USER = os.environ.get("DB_USER")
+DB_PORT = os.environ.get("DB_PORT")
+DB_HOST = os.environ.get("DB_HOST")
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 provider = 'postgres'
 db_name = 'postgres'
 
 db_options=dict(
     provider=provider,
-    user=USER,
-    password=PASSWORD,
-    host=HOST,
-    port=PORT,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=DB_PORT,
     database=db_name
 )
 
