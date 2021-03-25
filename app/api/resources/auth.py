@@ -30,3 +30,35 @@ class Login(Resource):
         except ValidationError as error:
             abort(400, message=error.messages)
 
+
+# For an Admin to register, there is no need for 
+# and ID nor devices
+sign_up_validator = AdminSchema(exclude=("id", "devices"))
+class SignUp(Resource):
+
+    """
+    Adds an admin to the admin database. Payload is read from JSON body
+    of the request.
+    """
+    def post(self):
+
+        try:
+            data_json = sign_up_validator.load(request.json)
+
+            email = data_json['email']
+
+            with db_session:
+
+                # Check if user exists in database
+                admin = Admin.get(email = email)
+
+                # Admin already exists
+                if admin is not None:
+                    abort(400, message = "You are already signed up. Login instead")
+
+                Admin(**data_json)
+
+                return {"message": "Sucesfully created admin"}, 201
+        
+        except ValidationError as error:
+            abort(400, message=error.messages)

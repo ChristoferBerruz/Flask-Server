@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_restful import Api
 from app.api.resources.handwashing import HandwashingRecordItem, HandwashingRecords
 from app.api.resources.admin import AdminInfo
-from app.api.resources.auth import Login
+from app.api.resources.auth import Login, SignUp
 from flask_jwt_extended import JWTManager
 
 from app.database.models import db
@@ -29,6 +29,7 @@ api.add_resource(HandwashingRecordItem, '/handwashing-record/<int:record_id>', '
 api.add_resource(HandwashingRecords, '/handwashing-record/all/<int:device_id>')
 api.add_resource(AdminInfo, '/admin/<int:admin_id>', '/admin')
 api.add_resource(Login, '/login')
+api.add_resource(SignUp, '/signup')
 if __name__ == "main":
     app.run()
 
