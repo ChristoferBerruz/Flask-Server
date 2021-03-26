@@ -8,6 +8,8 @@ from flask_jwt_extended import JWTManager
 from app.database.models import db
 from app.config import config
 
+from app.utils.callbacks import JWTCallbacks
+
 # Create flask app
 app = Flask(__name__)
 
@@ -15,6 +17,9 @@ app.config.from_object(config)
 
 # Add auth service
 jwt = JWTManager(app)
+
+# Bind callbacks to jwt
+JWTCallbacks(jwt)
 
 # Make app a REST api
 api = Api(app, prefix=config.API_PREFIX)
