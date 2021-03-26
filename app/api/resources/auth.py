@@ -28,7 +28,7 @@ class Login(Resource):
                 if not check_password_hash(admin.password, password):
                     abort(400, message="Invalid password.")
 
-                access_token = create_access_token(identity = admin.id)
+                access_token = create_access_token(identity = admin)
                 return {"access_token":access_token}
 
         except ValidationError as error:
