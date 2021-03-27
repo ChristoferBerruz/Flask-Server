@@ -11,9 +11,22 @@
 
 ## Developing locally
 
+### Environment variables
+
+For this to run, you need the following environment variables set up:
+
+* ```JWT_SECRET_KEY```
+* ```DB_HOST```
+* ```CACHE_HOST```
+* ```DB_PORT```
+* ```DB_USER```
+* ```DB_PASSWORD```
+
+### Steps
+
 1. Create a python virtual environment
 2. Clone this repository
-3. **Contact me so I can give you an ```.env``` file**. Place this file under the ```app/config``` folder.
+3. Set environment variables or place them in an ```.env``` file file under the ```app/config``` folder.
 4. Install dependencies using ```pip install -r app/requirements.txt```
     * The Pony ORM dependency uses psycopg2 which requires some native binaries. It ***might*** require
       installing those binaries
@@ -35,14 +48,21 @@ Pull the docker image from DockerHub using the following
 
 ### Building from source
 
-**You need an ```.env``` file for the container to work.** Contact me and I will give you the credentials.
-
 To build, simply run the script ```build-docker.sh```. It should execute without any problem
 
 ### Running the container
 
-Simply run the ```run-docker.sh``` script.
+Make sure to have all environment variables defined above. Otherwise, the container won't run properly.
+
+If you built the container from source with an ```.env``` in it, simply run the ```run-docker.sh``` script. Otherwise, describe the environment variables while using the ```docker run``` command.
 
 ## Dependencies
 
-Notable dependencies are Flask, Flask Restful, and Pony ORM.
+Notable dependencies are:
+
+* Flask
+* Flask-restful
+* Marshmallow
+* Pony ORM
+* Redis
+* JWT-Extended
