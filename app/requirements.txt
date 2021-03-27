@@ -6,3 +6,4 @@ psycopg2==2.8.6
 flask-restful==0.3.8
 marshmallow==3.10.0
 flask-jwt-extended==4.1.0
+redis==3.5.3
