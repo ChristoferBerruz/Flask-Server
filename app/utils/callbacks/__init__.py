@@ -1,6 +1,6 @@
 from app.database.models import Admin
 from pony.orm import db_session, ObjectNotFound
-
+from app.cache import CacheServices
 
 class JWTCallbacks():
 
@@ -18,6 +18,15 @@ class JWTCallbacks():
         def lookup_callback(_jwt_header, jwt_data):
             return self.lookup_user(_jwt_header, jwt_data)
 
+        # Get caching service
+        jwt_redis_blocklist = CacheServices.get_redis_service('jwt_redis_blocklist')
+
+        # Create callback for logout abilities
+        @jwt.token_in_blocklist_loader
+        def check_if_token_is_revoked(jwt_header, jwt_payload):
+            jti = jwt_payload["jti"]
+            token_in_redis = jwt_redis_blocklist.get(jti)
+            return token_in_redis is not None
 
     """
     Specifies which parameter to use as identity for JWTManager. For example,

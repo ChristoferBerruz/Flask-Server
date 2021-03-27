@@ -1,15 +1,16 @@
 from flask import request, jsonify
 from flask_restful import Resource, abort
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
 from app.database.schemas import AdminSchema
 from app.database.models import Admin
 from marshmallow import ValidationError
 from pony.orm import db_session
 
 from werkzeug.security import generate_password_hash, check_password_hash
+from app.cache import CacheServices
+from datetime import timedelta
 
 login_data_validator = AdminSchema(only=("email", "password"))
-
 class Login(Resource):
 
     def post(self):
@@ -70,3 +71,15 @@ class SignUp(Resource):
         
         except ValidationError as error:
             abort(400, message=error.messages)
+
+
+# Time to remove the token from the blacklist
+ACCESS_EXPIRES = timedelta(hours=1)
+class Logout(Resource):
+
+    @jwt_required()
+    def post(self):
+        jwt_redis_blocklist = CacheServices.get_redis_service('jwt_redis_blocklist')
+        jti = get_jwt()["jti"]
+        jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
+        return jsonify(msg="Access token revoked")
