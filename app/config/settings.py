@@ -13,7 +13,7 @@ DB_USER = os.environ.get("DB_USER")
 DB_PORT = os.environ.get("DB_PORT")
 DB_HOST = os.environ.get("DB_HOST")
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
-_CACHE_HOST = os.environ.get("CACHE_HOST")
+CACHE_HOST = os.environ.get("REDIS_HOST")
 
 provider = 'postgres'
 db_name = 'postgres'
@@ -33,7 +33,7 @@ Base configuration to be extended by all other configurations
 class BaseConfig():
     API_PREFIX = '/api/v1'
     DB_OPTIONS = db_options
-    CACHE_HOST = _CACHE_HOST
+    REDIS_HOST = CACHE_HOST
     SECRET_KEY = JWT_SKEY
     TESTING = False
     DEBUG = False

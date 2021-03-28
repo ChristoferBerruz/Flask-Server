@@ -22,7 +22,7 @@ jwt = JWTManager(app)
 # Create a cache service
 CacheServices.create_redis_service(
     service_key = 'jwt_redis_blocklist',
-    host = config.CACHE_HOST,
+    host = config.REDIS_HOST,
     db = 0,
     decode_responses = True
     )
