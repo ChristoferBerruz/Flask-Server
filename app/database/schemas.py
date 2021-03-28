@@ -19,7 +19,7 @@ class RecordingDeviceSchema(Schema):
     date_installed = fields.DateTime()
     admin = fields.Integer()
 
-class HanwashingRecordSchema(Schema):
+class HandwashingRecordSchema(Schema):
     id = fields.Integer()
     timestamp = fields.DateTime()
     duration = fields.Float()
