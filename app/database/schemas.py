@@ -2,6 +2,7 @@
 # to be used across the program
 
 from marshmallow import Schema, fields, ValidationError
+from datetime import datetime
 
 class AdminSchema(Schema):
     id = fields.Integer()
@@ -28,3 +29,8 @@ class HandwashingRecordSchema(Schema):
 class PasswordUpdateForm(Schema):
     current_password = fields.Str()
     new_password = fields.Str()
+
+class AllRecordParameters(Schema):
+    device_id = fields.Integer()
+    start_date = fields.DateTime()
+    end_date = fields.DateTime()

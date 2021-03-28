@@ -2,7 +2,7 @@ from flask_restful import Resource, abort, reqparse
 from flask import request
 from flask_jwt_extended import jwt_required, current_user
 from app.database.models import HandwashingRecord, RecordingDevice, Admin
-from app.database.schemas import HandwashingRecordSchema
+from app.database.schemas import HandwashingRecordSchema, AllRecordParameters
 from pony.orm import db_session, ObjectNotFound, select
 from datetime import datetime
 from marshmallow import ValidationError
@@ -52,7 +52,6 @@ class HandwashingRecordItem(Resource):
 
 
         with db_session:
-            
             # Validate that device exists in database
             device_id = data['device']
             device = RecordingDevice.get(id=device_id)
@@ -65,13 +64,36 @@ class HandwashingRecordItem(Resource):
             return {}, 201
 
 
+records_args_validator = AllRecordParameters()
 class HandwashingRecords(Resource):
 
-    def get(self, device_id):
+    @jwt_required()
+    def get(self):
+
+        data = None
+
+        try:
+            data = records_args_validator.load(request.args, partial=True)
+        except ValidationError as error:
+            abort(400, message=error.messages)
+
+        device_id = data.get('device_id', None)
+        
+        if device_id is None:
+            abort(400, message='You must specify a device id.')
+
+        start_date = data.get('start_date', None)
+        end_date = data.get('end_date', None)
 
         with db_session:
             records = HandwashingRecord.select(lambda r: r.device.id == device_id)
+            
+            if start_date is not None:
+                records = records.filter(lambda r: r.timestamp >= start_date)
 
+            if end_date is not None:
+                records = records.filter(lambda r: r.timestamp <= end_date)
+                
             data = [{
                 'id':record.id,
                 'timestamp':str(record.timestamp),

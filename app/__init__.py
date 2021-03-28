@@ -39,8 +39,7 @@ db.generate_mapping(create_tables=True)
 
 # Add enpoints
 api.add_resource(HandwashingRecordItem, '/handwashing-record/<int:record_id>', '/handwashing-record')
-
-api.add_resource(HandwashingRecords, '/handwashing-record/all/<int:device_id>')
+api.add_resource(HandwashingRecords, '/handwashing-record/all')
 api.add_resource(AdminInfo, '/admin')
 api.add_resource(UpdatePassword, '/admin/update-password')
 api.add_resource(Login, '/login')
