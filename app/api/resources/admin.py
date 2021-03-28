@@ -1,22 +1,14 @@
 from flask_restful import Resource, abort, reqparse
-from flask import request
+from flask import request, jsonify
 from flask_jwt_extended import jwt_required, current_user
 from app.database.models import HandwashingRecord, RecordingDevice, Admin
+from app.database.schemas import AdminSchema
 from pony.orm import db_session, ObjectNotFound, select
 from datetime import datetime
 import json
 from marshmallow import Schema, fields, ValidationError
 
-class AdminForm(Schema):
-    firstname = fields.Str(required=True)
-    lastname = fields.Str(required=True)
-    organization = fields.Str(required=True)
-    email = fields.Email(required=True)
-    password = fields.Str(required=True)
-
-
-admin_form_validator = AdminForm()
-
+admin_update_info = AdminSchema(exclude=("id", "devices", "password"))
 class AdminInfo(Resource):
     
     '''
@@ -45,31 +37,22 @@ class AdminInfo(Resource):
         except ObjectNotFound:
             abort(404, message=f'Admin of id {admin_id} not found.')
 
+    '''
+    All catch to update information about an Admin.
+    '''
+    @jwt_required()
+    def patch(self):
 
-    def post(self):
+        admin_id = current_user.id
+        admin_new_data = None
+
         try:
-            admin_info = admin_form_validator.load(request.json)
-
-            firstname = admin_info['firstname']
-            lastname = admin_info['lastname']
-            organization = admin_info['organization']
-            email = admin_info['email']
-            password = admin_info['password']
-
-            with db_session:
-                 
-                if Admin.get(email=email) is not None:
-                    abort(400, message="Admin already exists. Use PATCH to update information")
-                
-                Admin(
-                    firstname = firstname,
-                    lastname = lastname,
-                    organization = organization,
-                    email = email,
-                    password = password
-                )
-
-                return 201
-                
+            admin_new_data = admin_update_info.load(request.json)
         except ValidationError as error:
             abort(400, message=error.messages)
+
+        with db_session:
+            admin = Admin[admin_id]
+            admin.set(**admin_new_data)
+
+            return jsonify(message="Sucesfully updated information")
