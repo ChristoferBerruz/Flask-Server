@@ -1,7 +1,7 @@
 from flask import request, jsonify
 from flask_restful import Resource, abort
-from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt
-from app.database.schemas import AdminSchema
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, current_user
+from app.database.schemas import AdminSchema, PasswordUpdateForm
 from app.database.models import Admin
 from marshmallow import ValidationError
 from pony.orm import db_session
@@ -83,3 +83,29 @@ class Logout(Resource):
         jti = get_jwt()["jti"]
         jwt_redis_blocklist.set(jti, "", ex=ACCESS_EXPIRES)
         return jsonify(msg="Access token revoked")
+
+password_update_validator = PasswordUpdateForm()
+class UpdatePassword(Resource):
+    
+    @jwt_required()
+    def post(self):
+        admin_id = current_user.id
+
+        update_data = None
+        
+        try:
+            update_data = password_update_validator.load(request.json)
+        except ValidationError as error:
+            abort(400, message=error.messages)
+
+        with db_session:
+            admin = Admin[admin_id]
+
+            valid_password = check_password_hash(admin.password, update_data['current_password'])
+
+            if not valid_password:
+                abort(400, message="Current password is incorrect. Try again.")
+            
+            admin.password = generate_password_hash(update_data['new_password'])
+
+            return jsonify(message = "Sucesfully update your password.")

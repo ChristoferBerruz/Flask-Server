@@ -24,3 +24,7 @@ class HanwashingRecordSchema(Schema):
     timestamp = fields.DateTime()
     duration = fields.Float()
     device = fields.Integer()
+
+class PasswordUpdateForm(Schema):
+    current_password = fields.Str()
+    new_password = fields.Str()
