@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_restful import Api
 from app.api.resources.handwashing import HandwashingRecordItem, HandwashingRecords
-from app.api.resources.device import Device
+from app.api.resources.device import Device, Devices
 from app.api.resources.admin import AdminInfo
 from app.api.resources.auth import Login, SignUp, Logout, UpdatePassword
 from flask_jwt_extended import JWTManager
@@ -42,6 +42,7 @@ db.generate_mapping(create_tables=True)
 api.add_resource(HandwashingRecordItem, '/handwashing-record/<int:record_id>', '/handwashing-record')
 api.add_resource(HandwashingRecords, '/handwashing-record/all')
 api.add_resource(Device, '/device')
+api.add_resource(Devices, '/device/all')
 api.add_resource(AdminInfo, '/admin')
 api.add_resource(UpdatePassword, '/admin/update-password')
 api.add_resource(Login, '/login')

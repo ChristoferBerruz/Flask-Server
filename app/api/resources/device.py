@@ -38,4 +38,25 @@ class Device(Resource):
             # Change name of device
             device.name = name
 
-        
+
+class Devices(Resource):
+
+    """
+    Gets all devices info for admin calling API
+    """
+    @jwt_required()
+    def get(self):
+
+        admin_id = current_user.id
+
+        with db_session:
+
+            devices = Admin[admin_id].devices
+            res = [{
+                "id": dv.id,
+                "name": dv.name,
+                "location": dv.location,
+                "date_installed": str(dv.date_installed)
+            } for dv in devices]
+
+            return res
