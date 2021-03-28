@@ -1,5 +1,6 @@
 from flask_restful import Resource, abort, reqparse
 from flask import request
+from flask_jwt_extended import jwt_required, current_user
 from app.database.models import HandwashingRecord, RecordingDevice, Admin
 from pony.orm import db_session, ObjectNotFound, select
 from datetime import datetime
@@ -17,9 +18,14 @@ class AdminForm(Schema):
 admin_form_validator = AdminForm()
 
 class AdminInfo(Resource):
+    
+    '''
+    Admin can only access the information about itself
+    '''
+    @jwt_required()
+    def get(self):
 
-    def get(self, admin_id):
-
+        admin_id = current_user.id
         try:
             with db_session:
                 admin = Admin[admin_id]

@@ -41,7 +41,7 @@ db.generate_mapping(create_tables=True)
 api.add_resource(HandwashingRecordItem, '/handwashing-record/<int:record_id>', '/handwashing-record')
 
 api.add_resource(HandwashingRecords, '/handwashing-record/all/<int:device_id>')
-api.add_resource(AdminInfo, '/admin/<int:admin_id>', '/admin')
+api.add_resource(AdminInfo, '/admin')
 api.add_resource(Login, '/login')
 api.add_resource(SignUp, '/signup')
 api.add_resource(Logout, '/logout')
