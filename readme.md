@@ -17,7 +17,7 @@ For this to run, you need the following environment variables set up:
 
 * ```JWT_SECRET_KEY```
 * ```DB_HOST```
-* ```CACHE_HOST```
+* ```REDIS_HOST```
 * ```DB_PORT```
 * ```DB_USER```
 * ```DB_PASSWORD```
