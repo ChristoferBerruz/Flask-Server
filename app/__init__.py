@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_restful import Api
+from flask_cors import CORS
 from app.api.resources.handwashing import HandwashingRecordItem, HandwashingRecords
 from app.api.resources.device import Device, Devices
 from app.api.resources.admin import AdminInfo
@@ -16,6 +17,9 @@ from app.cache import CacheServices
 app = Flask(__name__)
 
 app.config.from_object(config)
+
+# Add CORS Support
+CORS(app)
 
 # Add auth service
 jwt = JWTManager(app)
