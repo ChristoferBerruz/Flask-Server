@@ -46,7 +46,6 @@ api.add_resource(Devices, '/device/all')
 api.add_resource(AdminInfo, '/admin')
 api.add_resource(UpdatePassword, '/admin/update-password')
 api.add_resource(Login, '/login')
-api.add_resource(SignUp, '/signup')
 api.add_resource(Logout, '/logout')
 if __name__ == "main":
     app.run()
