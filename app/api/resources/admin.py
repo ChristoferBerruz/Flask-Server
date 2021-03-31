@@ -8,7 +8,7 @@ from datetime import datetime
 import json
 from marshmallow import Schema, fields, ValidationError
 
-admin_update_info = AdminSchema(exclude=("id", "devices", "password"))
+admin_update_info = AdminSchema(exclude=("id", "devices", "password"), partial=True)
 class AdminInfo(Resource):
     
     '''
