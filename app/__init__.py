@@ -5,6 +5,7 @@ from app.api.resources.handwashing import HandwashingRecordItem, HandwashingReco
 from app.api.resources.device import Device, Devices
 from app.api.resources.admin import AdminInfo
 from app.api.resources.auth import Login, SignUp, Logout, UpdatePassword
+from app.api.resources.auth import add_automatic_token_refresh
 from flask_jwt_extended import JWTManager
 
 from app.database.models import db
@@ -39,6 +40,9 @@ CacheServices.create_redis_service(
 
 # Bind callbacks to jwt
 JWTCallbacks(jwt)
+
+# Add automatic token refresh to app
+add_automatic_token_refresh(app)
 
 # Make app a REST api
 api = Api(app, prefix=config.API_PREFIX)

@@ -9,7 +9,7 @@ from pony.orm import db_session
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.cache import CacheServices
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 
 login_data_validator = AdminSchema(only=("email", "password"))
 class Login(Resource):
@@ -118,3 +118,25 @@ class UpdatePassword(Resource):
             admin.password = generate_password_hash(update_data['new_password'])
 
             return jsonify(message = "Sucesfully update your password.")
+
+
+def add_automatic_token_refresh(app):
+
+    @app.after_request
+    def refresh_token(response):
+        try:
+            exp_timestamp = get_jwt()["exp"]
+            now = datetime.now(timezone.utc)
+
+            expires_in = 30
+
+            # Check if token expires in given timedelta
+            target_timestamp = datetime.timestamp(now + timedelta(minutes=expires_in))
+            if target_timestamp > exp_timestamp:
+                access_token = create_access_token(identity=get_jwt_identity())
+                set_access_cookies(response, access_token)
+                
+            return response
+        except (RuntimeError, KeyError):
+            # Case where there is not a valid JWT. Just return the original respone
+            return response
