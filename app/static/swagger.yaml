@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Cleanhands Admin API.
-  description: API backend for admin cleanhands website.
+  description: API backend for admin cleanhands website. It is meant to be used from a web application.
   version: 0.0.1
 
 servers:
@@ -100,15 +100,7 @@ paths:
                     format: string
         
         '200':
-          description: Successful login. Gives back an authentication token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    format: string
+          description: Successful login. It Set headers with respective cookies.
 
   /logout:
     post:
