@@ -1,5 +1,9 @@
 # Documentation for Flask Server
 
+## Swagger documentation
+
+The swagger documentation can be found at ```/swagger```
+
 ## Project Structure
 
 | Folder | Description
