@@ -4,6 +4,7 @@
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
+from datetime import timedelta
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -37,12 +38,16 @@ class BaseConfig():
     SECRET_KEY = JWT_SKEY
     TESTING = False
     DEBUG = False
+    JWT_TOKEN_LOCATION = ["cookies"]
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
 
 
 class DevConfig(BaseConfig):
     FLASK_ENV = 'development'
     DEBUG = True
+    JWT_COOKIE_SECURE = False
 
 
 class ProductionConfig(BaseConfig):
     FLASK_ENV = 'production'
+    JWT_COOKIE_SECURE = True
