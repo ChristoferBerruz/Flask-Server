@@ -5,13 +5,13 @@ from marshmallow import Schema, fields, ValidationError
 from datetime import datetime
 
 class AdminSchema(Schema):
-    id = fields.Integer()
-    firstname = fields.Str()
-    lastname = fields.Str()
-    organization = fields.Str()
-    email = fields.Email()
+    id = fields.Integer(required=True)
+    firstname = fields.Str(required=True)
+    lastname = fields.Str(required=True)
+    organization = fields.Str(required=True)
+    email = fields.Email(required=True)
     devices = fields.List(fields.Integer())
-    password = fields.Str()
+    password = fields.Str(required=True)
 
 class RecordingDeviceSchema(Schema):
     id = fields.Integer()
