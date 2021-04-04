@@ -13,6 +13,8 @@ from app.config import config
 from app.utils.callbacks import JWTCallbacks
 from app.cache import CacheServices
 
+from app.swagger_init import bind_swagger
+
 # Create flask app
 app = Flask(__name__)
 
@@ -20,6 +22,9 @@ app.config.from_object(config)
 
 # Add CORS Support
 CORS(app)
+
+# Add swagger Support
+bind_swagger(app)
 
 # Add auth service
 jwt = JWTManager(app)

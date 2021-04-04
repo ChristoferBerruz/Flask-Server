@@ -1,0 +1,274 @@
+openapi: 3.0.0
+info:
+  title: Cleanhands Admin API.
+  description: API backend for admin cleanhands website.
+  version: 0.0.1
+
+servers:
+  - url: /api/v1
+    description: Version 1 of the Admin API
+
+paths:
+  /handwashing-record:
+    put:
+      security:
+        - bearerAuth: []
+      summary: Creates a handwashing record
+      requestBody:
+        description: Information of the record to be stored.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordingPutBody'
+
+      responses:
+        '201':
+          description: An empty json object
+          content:
+            application/json:
+              schema:
+                type: object
+
+        '401':
+          description: Invalid authentication token or none at all
+
+        '400':
+          description: Device ID is not found in database
+  
+  /handwashing-record/all:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Get all records from the device ID owned by the admin
+      description: Records from a device own by admin are retrieved. Optional, only certain records in a given time window.
+      parameters:
+        - in: query
+          name: device_id
+          schema:
+            type: integer
+          description: Device id to retrieve records from
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date-time
+          description: OPTIONAL, get records that were added to database after or equal start date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date-time
+          description: OPTIONAL, get records that were added to database before or equal end date
+      
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HandwashingRecord'
+        '400':
+          description: Bad request. Either ommited device_id or invalid parameters passed
+        
+        '401':
+          description: Invalid authentication token or none at all
+
+  /login:
+    post:
+      summary: Logs in an admin and gets an authentication token if successful
+      requestBody:
+        summary: Information of the admin to be logged in
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLoginInfo'
+
+      responses:
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+        
+        '200':
+          description: Successful login. Gives back an authentication token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    format: string
+
+  /logout:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Puts the current authentication token in a blacklist
+
+      responses:
+        '200':
+          description: Successful added token in blacklist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    format: string
+
+  /admin:
+    get:
+      security:
+        - bearerAuth: []
+      summary: Gets information of currently logged in admin
+      responses:
+        '200':
+          description: Successful retrieved admin info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminInfo'
+
+        '400':
+          description: Admin not found
+    patch:
+      security:
+        - bearerAuth: []
+      summary: Updates admin information. ALL Fields in the body are OPTIONAL. Include at least one field.
+      requestBody:
+        summary: Fields of the admin to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminUpdateInfo'
+      responses:
+        '400':
+          description: Bad request. You included unknown fields
+        
+        '200':
+          description: Successfully modified admin info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    format: string
+
+  /admin/update-password:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Updates password for current logged in email
+      requestBody:
+        summary: Current and new password for admin
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                current_password:
+                  type: string
+                  format: string
+                new_password:
+                  type: string
+                  format: string
+      responses:
+        '400':
+          description: Bad request. You must provide both current and new password
+
+        '200':
+          description: Successfully updated password.
+
+
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+
+    RecordingPutBody:
+      properties:
+        device:
+          type: number
+          format: int32
+        duration:
+          type: number
+          format: float
+
+    AdminInfo:
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+          format: string
+        lastname:
+          type: string
+          format: string
+        organization:
+          type: string
+          format: string
+        email:
+          type: string
+          format: email
+        devices:
+          type: array
+          items:
+            type: integer
+    
+    AdminUpdateInfo:
+      properties:
+        firstname:
+          type: string
+          format: string
+        lastname:
+          type: string
+          format: string
+        organization:
+          type: string
+          format: string
+        email:
+          type: string
+          format: email
+
+    HandwashingRecord:
+      properties:
+        id:
+          type: integer
+        timestamp:
+          type: string
+          format: datetime
+        duration:
+          type: number
+          format: float
+        device:
+          type: string
+
+    AdminLoginInfo:
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: string
