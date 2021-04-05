@@ -236,12 +236,6 @@ components:
         lastname:
           type: string
           format: string
-        organization:
-          type: string
-          format: string
-        email:
-          type: string
-          format: email
 
     HandwashingRecord:
       properties:
