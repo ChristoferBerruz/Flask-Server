@@ -37,6 +37,7 @@ class BaseConfig():
     REDIS_HOST = CACHE_HOST
     SECRET_KEY = JWT_SKEY
     CORS_SUPPORTS_CREDENTIALS = True
+    JWT_COOKIE_SAMESITE = "None"
     TESTING = False
     DEBUG = False
     JWT_TOKEN_LOCATION = ["cookies"]
@@ -46,7 +47,7 @@ class BaseConfig():
 class DevConfig(BaseConfig):
     FLASK_ENV = 'development'
     DEBUG = True
-    JWT_COOKIE_SECURE = False
+    JWT_COOKIE_SECURE = True
 
 
 class ProductionConfig(BaseConfig):
