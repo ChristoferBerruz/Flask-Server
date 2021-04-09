@@ -36,6 +36,7 @@ class BaseConfig():
     DB_OPTIONS = db_options
     REDIS_HOST = CACHE_HOST
     SECRET_KEY = JWT_SKEY
+    CORS_SUPPORTS_CREDENTIALS = True
     TESTING = False
     DEBUG = False
     JWT_TOKEN_LOCATION = ["cookies"]
