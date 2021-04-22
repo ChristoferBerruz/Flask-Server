@@ -17,6 +17,8 @@ from app.cache import CacheServices
 from app.swagger_init import bind_swagger
 from flask_socketio import SocketIO, emit
 
+from app.websocket.handy_socket import PiHandyChannel
+
 # Create flask app
 app = Flask(__name__)
 
@@ -65,14 +67,7 @@ api.add_resource(Logout, '/logout')
 
 # Create SocketIO
 socketio = SocketIO(app, cors_allowed_origins='*', logger=True)
-
-@socketio.on('data', namespace='videos')
-def handle_data_video(data):
-    print(f'Received on videos: {data}')
-
-@socketio.on('connect', namespace='videos')
-def handle_connect_video():
-    print(f'Someone connected on videos')
+socketio.on_namespace(PiHandyChannel('/pi-frames'))
 
 if __name__ == "main":
     socketio.run(app)
