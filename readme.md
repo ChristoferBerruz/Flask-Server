@@ -44,12 +44,6 @@ If you just want to try the server, without modifying anything, build a docker c
 
 If you are using Windows, use WSL 2 to build and run the container.
 
-### Download from DockerHub
-
-Pull the docker image from DockerHub using the following
-
-```docker pull cberruz/cleanhands-flask-server```
-
 ### Building from source
 
 To build, simply run the script ```build-docker.sh```. It should execute without any problem
@@ -58,7 +52,7 @@ To build, simply run the script ```build-docker.sh```. It should execute without
 
 Make sure to have all environment variables defined above. Otherwise, the container won't run properly.
 
-If you built the container from source with an ```.env``` in it, simply run the ```run-docker.sh``` script. Otherwise, describe the environment variables while using the ```docker run``` command.
+If you built the container from source with an ```.env``` in it, simply run the ```run-docker.sh``` script. Otherwise, describe the environment variables while using the ```docker run``` command or ```docker-compose```.
 
 ## Dependencies
 
