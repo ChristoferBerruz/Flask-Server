@@ -66,7 +66,7 @@ api.add_resource(Logout, '/logout')
 
 
 # Create SocketIO
-socketio = SocketIO(app, cors_allowed_origins='*', logger=True)
+socketio = SocketIO(app, cors_allowed_origins='*')
 socketio.on_namespace(PiHandyChannel('/pi-frames'))
 
 if __name__ == "main":
