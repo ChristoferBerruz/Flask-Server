@@ -1,1 +1,1 @@
-sudo docker run --name cleanhands-flask-server -p 5000:5000 cleanhands-flask-server
+sudo docker run --name cleanhands-flask-server -p 8080:8080 cleanhands-flask-server
