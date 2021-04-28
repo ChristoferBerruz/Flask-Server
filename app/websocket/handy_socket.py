@@ -11,6 +11,12 @@ class PiHandyChannel(Namespace):
     def on_frame(self, frame):
         emit('frame', frame, broadcast=True)
 
+    def on_frameall(self, frame):
+        emit('frameall', frame, broadcast=True)
+
+    def on_processall(self):
+        emit('processall', broadcast=True)
+
     def on_result(self, result):
         emit('result', result, broadcast=True)
 
